@@ -63,6 +63,7 @@ func login() {
 			fmt.Println("Berhasil log in!")
 			fmt.Println("=============================================")
 			program()
+			return
 		}
 	}
 }
@@ -85,60 +86,62 @@ func program() {
 	var x string
 
 	fmt.Scan(&nomor)
-	if nomor == 1 {
-		fmt.Println("1. Pilih kategori")
-		fmt.Println("2. Semua barang")
-		fmt.Print("Silakan memilih nomor: ")
-		fmt.Scan(&no1)
-
-		if no1 == 1 {
-			s_kategori(arr, n)
-			program()
-		} else if no1 == 2 {
-			cetak(arr, n)
-			program()
-		}
-
-	} else if nomor == 2 {
-		edit(&arr, &n)
-	} else if nomor == 3 {
-		cetakt(irr, nirr)
-		program()
-	} else if nomor == 4 {
-		edittrans(&irr, &nirr, &arr, &n)
-	} else if nomor == 5 {
-		fmt.Println("")
-		fmt.Print("Masukkan nama barang yang anda cari: ")
-		fmt.Scan(&x)
-		idx = binarysearch(arr, n, x)
-		if idx == -1 {
-			fmt.Println("Barang tidak ada")
-		} else {
-			fmt.Printf("%-15s %-15s %-10s \n", "NAMA BARANG", "KATEGORI", "HARGA JUAL")
-			fmt.Printf("%-15s %-15s %-10d \n", arr[idx].nama, arr[idx].kategori, arr[idx].harga)
-			fmt.Println("---------------------------------------------")
-			fmt.Println("1. Tampilkan rincian")
-			fmt.Println("2. Kembali")
+	for nomor !=8{
+		if nomor == 1 {
+			fmt.Println("1. Pilih kategori")
+			fmt.Println("2. Semua barang")
 			fmt.Print("Silakan memilih nomor: ")
 			fmt.Scan(&no1)
+
 			if no1 == 1 {
-				cetak_rinci(arr, n, idx)
+				s_kategori(arr, n)
 				program()
-			} else {
+			} else if no1 == 2 {
+				cetak(arr, n)
 				program()
 			}
-		}
 
-	} else if nomor == 6 {
-		uruttop(arr, n)
-		program()
-	} else if nomor == 7 {
-		fmt.Println("TOTAL PENDAPATAN	:", t_pendapatan)
-		fmt.Println("TOTAL MODAL		:", t_modal)
-		fmt.Println("TOTAL KEUNTUNGAN	:", t_pendapatan-t_modal)
-	} else if nomor == 8 {
-		return
+		} else if nomor == 2 {
+			edit(&arr, &n)
+		} else if nomor == 3 {
+			cetakt(irr, nirr)
+			program()
+		} else if nomor == 4 {
+			edittrans(&irr, &nirr, &arr, &n)
+		} else if nomor == 5 {
+			fmt.Println("")
+			fmt.Print("Masukkan nama barang yang anda cari: ")
+			fmt.Scan(&x)
+			idx = binarysearch(arr, n, x)
+			if idx == -1 {
+				fmt.Println("Barang tidak ada")
+			} else {
+				fmt.Printf("%-15s %-20s %-10s \n", "NAMA BARANG", "KATEGORI", "HARGA JUAL")
+				fmt.Printf("%-15s %-20s %-10d \n", arr[idx].nama, arr[idx].kategori, arr[idx].harga)
+				fmt.Println("---------------------------------------------")
+				fmt.Println("1. Tampilkan rincian")
+				fmt.Println("2. Kembali")
+				fmt.Print("Silakan memilih nomor: ")
+				fmt.Scan(&no1)
+				if no1 == 1 {
+					cetak_rinci(arr, n, idx)
+					program()
+				} else {
+					program()
+				}
+			}
+
+		} else if nomor == 6 {
+			uruttop(arr, n)
+			program()
+		} else if nomor == 7 {
+			fmt.Println("TOTAL PENDAPATAN	:", t_pendapatan)
+			fmt.Println("TOTAL MODAL		:", t_modal)
+			fmt.Println("TOTAL KEUNTUNGAN	:", t_pendapatan-t_modal)
+			program()
+		}
 	}
+	return
 }
 
 func cetakt(irr transaksi, n int) {
@@ -239,9 +242,9 @@ func cetak_kategori(arr id_barang, n int, kat string) {
 
 func cetak_rinci(arr id_barang, n int, idx int) {
 	fmt.Println("Nama Barang	:", arr[idx].nama)
-	fmt.Println("Kategori		:", arr[idx].kategori)
-	fmt.Println("Modal			:", arr[idx].modal)
-	fmt.Println("Harga Jual		:", arr[idx].harga)
+	fmt.Println("Kategori	:", arr[idx].kategori)
+	fmt.Println("Modal		:", arr[idx].modal)
+	fmt.Println("Harga Jual	:", arr[idx].harga)
 	fmt.Println("Barang terjual	:", arr[idx].terjual, "pcs")
 	fmt.Println("Stok barang	:", arr[idx].stok, "pcs")
 }
@@ -604,19 +607,19 @@ func uruttop(arr id_barang, n int) {
 	var array id_barang = arr
 	var temp barang
 	var i, j int
-	for i < n {
+
+	for i = 1; i < n; i++ { // loop dimulai dari indeks 1
 		j = i
 		temp = array[j]
-		for j > 0 && temp.terjual > array[j].terjual {
+		for j > 0 && temp.terjual > array[j-1].terjual { // urutan descending
 			array[j] = array[j-1]
 			j--
 		}
 		array[j] = temp
-		i++
 	}
 
 	fmt.Println("TOP 5 BEST SELLER")
-	for k := 0; k < 5; k++ {
+	for k := 0; k < 5 && k < n; k++ {
 		fmt.Printf("%d. %-10s dengan produk terjual sebanyak: %d\n", k+1, array[k].nama, array[k].terjual)
 	}
 }
